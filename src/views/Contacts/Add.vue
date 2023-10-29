@@ -83,7 +83,7 @@
                         </fieldset>
                         <fieldset class="center">
                             <label>Primary</label>
-                            <input type="checkbox" v-model="entry.default" @change="swapDefaults(entry, i)" />
+                            <ToggleInput v-model="entry.default" @change="swapDefaults(entry, i)" />
                         </fieldset>
                     </div>
                     <div class="input-errors" v-for="error of v$.phone.$errors" :key="error.$uid">
@@ -106,12 +106,13 @@
 <script setup lang="ts">
     import { computed, reactive, unref } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
-    import { BuildingOfficeIcon, PhoneIcon, EnvelopeIcon, HomeModernIcon } from "@heroicons/vue/24/solid";
+    import { BuildingOfficeIcon, EnvelopeIcon, HomeModernIcon } from "@heroicons/vue/24/solid";
     import { useVuelidate } from '@vuelidate/core'
     import { required, email, minLength } from '@vuelidate/validators'
-    import { PHONE_TYPE, type Contact, type PhoneEntry } from '@/types/Contact';
+    import { PHONE_TYPE, type PhoneEntry } from '@/types/Contact';
     import { contactFactory, phoneFactory } from '@/composable/contacts';
     import { useContactListStore } from '@/stores/contactList';
+    import ToggleInput from '@/components/Input/ToggleInput.vue';
 
     // Routee
     const router = useRouter();
@@ -122,7 +123,6 @@
 
     // Contact
     const id = route.params.id as string;
-    const index = store.getContactIndexByID(id);
     let contact = reactive(contactFactory());
 
     // Form actions
@@ -161,7 +161,7 @@
     };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
     header,
     footer,
     main {
@@ -177,7 +177,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: lightgray;
+        background: var(--indigo-wash);
 
         .action-btns {
             display: grid;

@@ -99,7 +99,7 @@
     };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
     header,
     footer,
     main {

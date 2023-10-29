@@ -8,8 +8,8 @@
     <section class="main_grid">
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/contacts">Contacts</RouterLink>
+        <RouterLink to="/contacts/browse">Browse Contacts</RouterLink>
+        <RouterLink to="/contacts/add">Add Contact</RouterLink>
       </nav>
       <section class="main_view">
         <RouterView />
@@ -24,7 +24,6 @@
 </script>
 
 <style scoped>
-
 header {
   display: grid;
   align-items: center;
@@ -33,31 +32,40 @@ header {
   width: 100vw;
   height: 4rem;
   position: fixed;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-bottom: 4px solid var(--indigo);
   z-index: 10;
 }
 
 .main_grid {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) 3fr;
-  gap: 2rem;
-  padding: 6rem 2rem 2rem 2rem;
+  grid-auto-flow: row;
+  padding-top: 4rem;
   border-radius: var(--general-border-radius);
+  min-height: 100vh;
+
+  @media (width >= 1024px) {
+    grid-template-columns: 240px 1fr;
+  }
 }
 
 .main_view {
-  background-color: white;
+  background-color: #f9f9f9;
   position: relative;
-  border-radius: var(--general-border-radius);
+  padding: 0rem 1rem 3rem 1rem;
+
+  @media (width >= 1024px) {
+    padding: 1rem 1rem 3rem 1rem;
+  }
 }
 
 nav {
   background-color: white;
-  border-radius: var(--general-border-radius);
+  padding: 1rem 0rem;
+  background-color: var(--indigo-wash);
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  font-weight: bold;
 }
 
 nav a.router-link-exact-active:hover {
@@ -67,6 +75,7 @@ nav a.router-link-exact-active:hover {
 nav a {
   display: block;
   padding: 0 1rem;
+  color: var(--indigo-shadow);
 }
 
 nav a:first-of-type {

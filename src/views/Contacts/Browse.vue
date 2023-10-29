@@ -1,10 +1,20 @@
 <template>
     <main>
-      <div class="card-container" v-for="(item, i) in store.contacts" :key="i">
-        <ContactCard :contact="item" @contact:delete="removeItem(i)" @contact:edit="editItem" @contact:read="readItem"/>
+      <div class="card-container">
+        <ContactCard
+          v-for="(item, i) in store.contacts"
+          :key="i"
+          :contact="item"
+          @contact:delete="removeItem(i)"
+          @contact:edit="editItem"
+          @contact:read="readItem"
+        />
       </div>
-      <button @click="addItem">Add Random Contact</button>
-      <button @click="showAddForm">Add Custom Contact</button>
+      <div class="grid">
+        <button @click="addItem(1)">Add Random Contact</button>
+        <button @click="addItem(10)">Add 10 Random Contacts</button>
+        <button @click="showAddForm">Add Custom Contact</button>
+      </div>
     </main>
   </template>
 
@@ -20,8 +30,10 @@
   // Store
   const store = useContactListStore();
 
-  const addItem = () => {
-    store.contacts.push(createContact());
+  const addItem = (items = 1) => {
+    for (let i = 0; i < items; i++) {
+      store.contacts.push(createContact());
+    }
   };
 
   const removeItem = (index: number) => {
@@ -49,5 +61,11 @@
   }
   .card-container {
     margin-bottom: 1.5rem;
+    display: grid;
+    gap: 1rem;
+    
+    @media (width >= 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    }
   }
 </style>

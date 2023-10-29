@@ -14,15 +14,10 @@
                 <p>{{ phone?.number }} ({{ phone?.type }})</p>
             </div>
         </div>
-        <div class="dropdown">
-            <button @click="toggleDropdownMenu">
-                Actions
-            </button>
-            <div v-if="dropdownState === 'open'" class="dropdown-menu">
-                <a @click="emit('contact:read', { id: contact?.id })">Details</a>
-                <a @click="emit('contact:edit', { id: contact?.id })">Edit</a>
-                <a @click="emit('contact:delete', { id: contact?.id })">Remove</a>
-            </div>
+        <div class="actions">
+            <a @click="emit('contact:read', { id: contact?.id })">Details</a>
+            <a @click="emit('contact:edit', { id: contact?.id })">Edit</a>
+            <a @click="emit('contact:delete', { id: contact?.id })">Remove</a>
         </div>
     </div>
 </template>
@@ -53,15 +48,15 @@
     });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
     .contact-card {
-        padding: 1.5rem 1rem;
-        border: 1px solid #ccc;
+        padding: .75rem 0.5rem;
+        background-color: white;
         display: grid;
         gap: 1rem;
-        grid-auto-flow: column;
-        grid-template-columns: 1fr 1fr 0.25fr;
         border-radius: var(--general-border-radius);
+        justify-content: center;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     }
 
     .contact-persona {
@@ -78,7 +73,7 @@
         img {
             max-width: 3rem;
             height: auto;
-            border-radius: 50%;
+            border-radius: var(--general-border-radius);
         }
     }
 
@@ -99,25 +94,10 @@
         }
     }
 
-    .dropdown {
-        position: relative;
-        display: inline-block;
-        padding: 1rem;
-
-        .dropdown-menu {
-            display: grid;
-            margin: 1rem;
-            padding: 0.25rem;
-            text-align: center;
-            position: absolute;
-            top: 1.5rem;
-            right: 0;
-            width: 120px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-            border-radius: var(--general-border-radius);
-            border: 1px solid gray;
-            z-index: 1;
-        }
+    .actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        justify-content: center;
+        text-align: center;
     }
 </style>
