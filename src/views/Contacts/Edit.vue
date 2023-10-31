@@ -8,39 +8,7 @@
             />
         </header>
         <main>
-            <div class="contact-persona">
-                <figure>
-                    <img :src="contact?.avatar" />
-                </figure>
-                <fieldset>
-                    <label>Salutation</label>
-                    <input :placeholder="`${ contact?.salutation ?? 'Mr, Ms, Etc.' }`" v-model="contact.salutation" />
-                    <label>First Name</label>
-                    <input v-model="contact.firstName" />
-                    <label>Last Name</label>
-                    <input v-model="contact.lastName" />
-                </fieldset>
-            </div>
-            <div class="contact-meta">
-                <div class="icon-grid email">
-                    <EnvelopeIcon />
-                    <fieldset>
-                        <label>Email Address</label>
-                        <input v-model="contact.email" type="email" />
-                    </fieldset>
-                </div>
-                <div class="phones">
-                    <p class="phone-header">Phone Numbers</p>
-                    <PhoneEntryWidget :phones="contact.phone" @add:phone="addPhone" @update:phone="updatePhone" />
-                </div>
-                <div class="icon-grid address" v-if="!isEmpty(contact?.address)">
-                    <HomeModernIcon />
-                    <div>
-                        <p>{{ contact?.address?.street }}</p>
-                        <p>{{ contact?.address?.city }} {{ contact?.address?.state }}, {{ contact?.address?.zip }}</p>
-                    </div>
-                </div>
-            </div>
+            <AddEditForm v-model:contact="contact" @add:phone="addPhone" @update:phone="updatePhone" />
         </main>
         <footer>
             <ActionHeaderFooter
@@ -55,15 +23,13 @@
 <script setup lang="ts">
     import { computed } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
-    import { EnvelopeIcon, HomeModernIcon } from "@heroicons/vue/24/solid";
-    import { isEmpty } from 'lodash';
     import { useVuelidate } from '@vuelidate/core'
     import { required, email, minLength } from '@vuelidate/validators'
     import { type Contact, type PhoneEntry } from '@/types/Contact';
     import { phoneFactory } from '@/composable/contacts';
     import { useContactListStore } from '@/stores/contactList';
-    import PhoneEntryWidget from '@/components/Contacts/PhoneEntryWidget.vue';
     import ActionHeaderFooter from '@/components/Contacts/ActionHeaderFooter.vue';
+    import AddEditForm from '@/components/Contacts/AddEditForm.vue';
 
     // Routee
     const router = useRouter();
