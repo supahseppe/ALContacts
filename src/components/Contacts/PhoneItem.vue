@@ -9,6 +9,7 @@
 import { type PropType, computed } from 'vue';
 import { PhoneIcon } from "@heroicons/vue/24/solid";
 import { type PhoneEntry, PHONE_TYPE } from '../../types/Contact';
+import { getPhoneTypeColor } from '@/composable/contacts';
 
 const props = defineProps({
     phone: Object as PropType<PhoneEntry>
@@ -18,32 +19,14 @@ const phoneColor = computed(() => {
     if (!props?.phone?.type) {
         return '';
     }
-    switch (props.phone.type) {
-        case PHONE_TYPE.MOBILE:
-            return 'purple';
-        case PHONE_TYPE.HOME:
-            return 'olive';
-        case PHONE_TYPE.WORK:
-            return 'red';
-        default: 
-            return 'black';
-    }
+    return getPhoneTypeColor(props.phone.type);
 });
 
 const iconColor = computed(() => {
     if (!props?.phone?.type) {
         return '';
     }
-    switch (props.phone.type) {
-        case PHONE_TYPE.MOBILE:
-            return 'fill-purple';
-        case PHONE_TYPE.HOME:
-            return 'fill-olive';
-        case PHONE_TYPE.WORK:
-            return 'fill-red';
-        default: 
-            return 'fill-black';
-    }
+    return 'fill-' + getPhoneTypeColor(props.phone.type);
 });
 
 </script>

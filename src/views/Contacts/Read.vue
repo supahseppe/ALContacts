@@ -1,11 +1,15 @@
 <template>
     <section v-if="contact && contact?.id">
         <header>
-            <button @click="router.push('/contacts/browse')">Back</button>
-            <div>
-                <button @click="deleteContactWarning">Delete</button>
-                <button @click="router.push(`/contacts/${id}/edit`)">Edit</button>
-            </div>
+            <ActionHeaderFooter
+                :cancel-btn="false"
+                :delete-btn="true"
+                :edit-btn="true"
+                :save-btn="false"
+                @action:back="router.push('/contacts/browse')"
+                @action:delete="deleteContactWarning"
+                @action:edit="router.push(`/contacts/${id}/edit`)"
+            />
         </header>
         <main>
             <div class="contact-persona">
@@ -30,8 +34,8 @@
             </div>
         </main>
         <footer>
-            <button @click="addPhone({ type: PHONE_TYPE.HOME })">Add Home Phone</button>
-            <button @click="addPhone({ type: PHONE_TYPE.WORK })">Add Work Phone</button>
+            <button @click="addPhone(PHONE_TYPE.HOME)">Add Example Home Phone</button>
+            <button @click="addPhone(PHONE_TYPE.WORK)">Add Example Work Phone</button>
         </footer>
     </section>
 </template>
@@ -44,6 +48,7 @@
     import { createPhone, getFullName } from '@/composable/contacts';
     import { useContactListStore } from '@/stores/contactList';
     import PhoneItem from '../../components/Contacts/PhoneItem.vue';
+    import ActionHeaderFooter from '@/components/Contacts/ActionHeaderFooter.vue';
 
     // Routee
     const router = useRouter();
@@ -112,5 +117,14 @@
         gap: 0.5rem;
         grid-auto-flow: column;
         grid-template-columns: 24px 1fr;
+    }
+
+    footer {
+        background-color: var(--cement);
+        display: flex;
+
+        button + button {
+            margin-left: 1rem;
+        }
     }
 </style>

@@ -13,6 +13,11 @@ export type PhoneEntry = {
     default: boolean,
 }
 
+export type PhoneUpdatePayload = {
+    phone: PhoneEntry,
+    key: number,
+}
+
 export type Contact = {
     id: string;
     salutation?: string;

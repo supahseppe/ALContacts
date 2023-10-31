@@ -38,13 +38,20 @@ header {
 
 .main_grid {
   display: grid;
-  grid-auto-flow: row;
+  gap: 1.5rem;
+  grid-auto-flow: row dense;
+  grid-template-rows: min-content 1fr;
   padding-top: 4rem;
   border-radius: var(--general-border-radius);
   min-height: 100vh;
+  max-width: 100vw;
+  background-color: var(--cement);
 
   @media (width >= 1024px) {
+    grid-auto-flow: column dense;
     grid-template-columns: 240px 1fr;
+    grid-template-rows: auto;
+    gap: 0;
   }
 }
 
@@ -59,7 +66,6 @@ header {
 }
 
 nav {
-  background-color: white;
   padding: 1rem 0rem;
   background-color: var(--indigo-wash);
 }

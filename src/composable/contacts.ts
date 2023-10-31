@@ -33,6 +33,19 @@ const getDefaultNumber = function (contact: Contact) {
     return find(contact.phone, (p: PhoneEntry) => p.default) as PhoneEntry;
 };
 
+const getPhoneTypeColor = function (type: PHONE_TYPE) {
+    switch (type) {
+        case PHONE_TYPE.MOBILE:
+            return 'purple';
+        case PHONE_TYPE.HOME:
+            return 'olive';
+        case PHONE_TYPE.WORK:
+            return 'red';
+        default: 
+            return 'black';
+    }
+}
+
 const getFullName = (contact: Contact) => {
     let res = '';
     if (contact?.salutation) { res+= `${contact.salutation} `};
@@ -65,4 +78,4 @@ const contactFactory: () => Contact = () => ({
     },
 });
 
-export { createContact, createPhone, getDefaultNumber, getFullName, phoneFactory, contactFactory }
+export { createContact, createPhone, getDefaultNumber, getFullName, getPhoneTypeColor, phoneFactory, contactFactory }

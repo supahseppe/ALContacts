@@ -1,6 +1,6 @@
 <template>
     <label class="toggle">
-        <input type="checkbox" :value="modelValue" @input="console.log($event)">
+        <input type="checkbox" :value="modelValue" :checked="modelValue" @input="$emit('update:modelValue', $event.target.checked)">
         <span class="slider"></span>
     </label>
 </template>
@@ -32,18 +32,18 @@ defineEmits(['update:modelValue'])
     background-color: gray;
     transition: .4s;
     border-radius: 34px;
-}
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+    &:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
 }
     
 input:checked+.slider {

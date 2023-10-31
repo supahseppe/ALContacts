@@ -20,6 +20,7 @@
   --maroon: #85144B;
   --white: #FFFFFF;
   --gray: #AAAAAA;
+  --cement: #F9F9F9;
   --silver: #DDDDDD;
   --black: #111111;
 }
@@ -420,4 +421,63 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+input,
+textarea,
+select {
+  padding: 0.5rem;
+  border: solid 1px var(--indigo-wash);
+  outline: 0;
+  font-size: 0.9em;
+  width: 100%;
+  background: var(--cement);
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  line-height: 150%;
+}
+
+input:hover,
+input:focus,
+textarea:hover,
+textarea:focus {
+  border-color: var(--indigo);
+}
+
+label {
+  margin-left: 0px;
+  color: var(--indigo-shadow);
+}
+
+button,
+input[type="submit"] {
+  cursor: pointer;
+  width: auto;
+  padding: 9px 15px;
+  background: var(--indigo);
+  border: 0;
+  font-size: 14px;
+  color: #FFFFFF;
+}
+
+fieldset {
+  border: none;
+}
+
+.input-errors {
+  padding: 0.25rem 0.5rem;
+  margin-top: -0.5rem;
+  background-color: var(--cement);
+  border: 1px solid var(--indigo-wash);
+  border-top: 0;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.error-msg {
+  font-size: 0.9em;
+  color: var(--red);
 }

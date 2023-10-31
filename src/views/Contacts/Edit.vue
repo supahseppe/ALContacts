@@ -1,11 +1,11 @@
 <template>
     <section v-if="contact && contact?.id">
         <header>
-            <button @click="router.back">Back</button>
-            <div class="action-btns">
-                <button @click="toRead">Cancel</button>
-                <button @click="saveContact">Save</button>
-            </div>
+            <ActionHeaderFooter
+                @action:back="router.back"
+                @action:cancel="router.push('/contacts')"
+                @action:save="saveContact"
+            />
         </header>
         <main>
             <div class="contact-persona">
@@ -29,20 +29,9 @@
                         <input v-model="contact.email" type="email" />
                     </fieldset>
                 </div>
-                <div v-for="(phone, i) in contact.phone" :key="i">
-                    <div class="icon-grid phone">
-                        <PhoneIcon />
-                        <div class="grid">
-                            <p>{{ phone.number }}</p>
-                            <select v-model="phone.type">
-                                <option v-for="(val, key) in PHONE_TYPE" :key="key" :value="val" :selected="phone.type == val">{{ val }}</option>
-                            </select>
-                            <div>
-                                <label>Default?</label>
-                                <input type="checkbox" v-model="phone.default" @change="swapDefaults(phone, i)" />
-                            </div>
-                        </div>
-                    </div>
+                <div class="phones">
+                    <p class="phone-header">Phone Numbers</p>
+                    <PhoneEntryWidget :phones="contact.phone" @add:phone="addPhone" @update:phone="updatePhone" />
                 </div>
                 <div class="icon-grid address" v-if="!isEmpty(contact?.address)">
                     <HomeModernIcon />
@@ -54,21 +43,27 @@
             </div>
         </main>
         <footer>
-            <button @click="router.back">Back</button>
-            <div class="action-btns">
-                <button @click="toRead">Cancel</button>
-                <button @click="saveContact">Save</button>
-            </div>
+            <ActionHeaderFooter
+                @action:back="router.back"
+                @action:cancel="router.push('/contacts')"
+                @action:save="saveContact"
+            />
         </footer>
     </section>
 </template>
 
 <script setup lang="ts">
+    import { computed } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
-    import { PhoneIcon, EnvelopeIcon, HomeModernIcon } from "@heroicons/vue/24/solid";
+    import { EnvelopeIcon, HomeModernIcon } from "@heroicons/vue/24/solid";
     import { isEmpty } from 'lodash';
-    import { PHONE_TYPE, type Contact, type PhoneEntry } from '@/types/Contact';
+    import { useVuelidate } from '@vuelidate/core'
+    import { required, email, minLength } from '@vuelidate/validators'
+    import { type Contact, type PhoneEntry } from '@/types/Contact';
+    import { phoneFactory } from '@/composable/contacts';
     import { useContactListStore } from '@/stores/contactList';
+    import PhoneEntryWidget from '@/components/Contacts/PhoneEntryWidget.vue';
+    import ActionHeaderFooter from '@/components/Contacts/ActionHeaderFooter.vue';
 
     // Routee
     const router = useRouter();
@@ -83,7 +78,13 @@
     const index = store.getContactIndexByID(id);
     let contact = { ...store.contacts[index] } as Contact;
 
-    const swapDefaults = (phone:PhoneEntry, key: number) => {
+    type phoneUpdatePayload = {
+        phone: PhoneEntry,
+        key: number,
+    }
+    const updatePhone = (payload: phoneUpdatePayload) => {
+        const { phone, key } = payload;
+        Object.assign(contact.phone[key], phone);
         if (phone.default) {
             for (let i = 0; i < contact.phone.length; i++) {
                 if (i !== key) {
@@ -93,35 +94,39 @@
         }
     }
 
-    const saveContact = () => {
-        store.contacts[index] = contact;
-        toRead();
+    const addPhone = () => {
+        contact.phone.push(phoneFactory())
+    };
+
+    // Validation
+    const rules = computed(() => ({
+        firstName: { required },
+        lastName: { required },
+        email: { required, email },
+        phone: { required, minLength: minLength(1) }
+    }));
+    
+    const v$ = useVuelidate(rules, contact, { $lazy: true });
+
+    const saveContact = async () => {
+        const valid = await v$.value.$validate();
+        if (valid) {
+            store.contacts[index] = contact;
+            toRead();
+        }
     };
 </script>
 
 <style scoped>
     header,
+    footer {
+        background: var(--indigo-wash);
+    }
+    
+    header,
     footer,
     main {
         padding: 1.5rem 1rem;
-    }
-
-    fieldset {
-        border: none;
-    }
-
-    header,
-    footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: lightgray;
-
-        .action-btns {
-            display: grid;
-            gap: 1rem;
-            grid-auto-flow: column;
-        }
     }
 
     .contact-persona {
@@ -165,16 +170,6 @@
 
         label {
             margin-right: 0.5rem;
-        }
-    }
-
-    .phone {
-        max-width: 75%;
-        .grid {
-            display: grid;
-            gap: 1rem;
-            grid-auto-flow: column;
-            grid-template-columns: 1.5fr 1fr 1fr;
         }
     }
 </style>
