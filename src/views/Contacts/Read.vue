@@ -24,11 +24,11 @@
                 <div v-for="(phone, i) in contact.phone" :key="i">
                     <PhoneItem :phone="phone" />
                 </div>
-                <div class="icon-grid address" v-if="!isEmpty(contact?.address)">
+                <div class="icon-grid address" v-if="!emptyAddress">
                     <HomeModernIcon />
                     <div>
                         <p>{{ contact?.address?.street }}</p>
-                        <p>{{ contact?.address?.city }} {{ contact?.address?.state }}, {{ contact?.address?.zip }}</p>
+                        <p>{{ contact?.address?.city }} {{ contact?.address?.state }}<span v-if="contact?.address?.state && contact?.address?.zip">,</span> {{ contact?.address?.zip }}</p>
                     </div>
                 </div>
             </div>
@@ -41,9 +41,9 @@
 </template>
 
 <script setup lang="ts">
+    import { computed } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import { EnvelopeIcon, HomeModernIcon } from "@heroicons/vue/24/solid";
-    import { isEmpty } from 'lodash';
     import { PHONE_TYPE } from '@/types/Contact';
     import { createPhone, getFullName } from '@/composable/contacts';
     import { useContactListStore } from '@/stores/contactList';
@@ -60,6 +60,18 @@
     // Contact
     const id = route.params.id as string;
     const contact = store.getContactByID(id);
+
+    const emptyAddress = computed(() => {
+        if (
+            contact?.address?.street ||
+            contact?.address?.city ||
+            contact?.address?.state ||
+            contact?.address?.zip
+        ) {
+            return false;
+        }
+        return true;
+    });
 
     const addPhone = (type: any) => {
         if (contact) {
