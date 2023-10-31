@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-    import { computed, reactive, unref } from 'vue';
+    import { reactive, unref } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import { useVuelidate } from '@vuelidate/core';
     import { type PhoneUpdatePayload } from '@/types/Contact';
@@ -38,12 +38,10 @@
     const store = useContactListStore();
 
     // Contact
-    const id = route.params.id as string;
     let contact = reactive(contactFactory());
 
     // Form actions
     const swapDefaults = (payload: PhoneUpdatePayload) => {
-        console.log('payload', payload);
         if (payload.phone.default) {
             for (let i = 0; i < contact.phone.length; i++) {
                 if (i !== payload.key) {
@@ -54,7 +52,6 @@
     }
 
     const addPhone = () => {
-        console.log(contact.phone);
         contact.phone.push(phoneFactory())
     };
 

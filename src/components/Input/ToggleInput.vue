@@ -1,6 +1,6 @@
 <template>
     <label class="toggle">
-        <input type="checkbox" :value="modelValue" :checked="modelValue" @input="$emit('update:modelValue', $event.target.checked)">
+        <input type="checkbox" :value="modelValue" :checked="modelValue" @input="$emit('update:modelValue', ($event?.target as any)?.checked)">
         <span class="slider"></span>
     </label>
 </template>

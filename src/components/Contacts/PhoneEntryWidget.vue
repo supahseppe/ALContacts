@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="input-errors" v-for="error of v$?.entries?.errors" :key="error.$uid">
+        <div class="input-errors" v-for="error of errors" :key="error.$uid">
             <div class="error-msg">{{ error.$message }}</div>
         </div>
         <button class="add-phone" @click.prevent="emit('add:phone')">Add new Phone Number</button>
@@ -41,8 +41,8 @@
 import { computed } from 'vue';
 import { PhoneIcon } from "@heroicons/vue/24/solid";
 import { useVuelidate } from '@vuelidate/core';
-import { helpers, minLength, required } from '@vuelidate/validators';
-import { PHONE_TYPE, type PhoneUpdatePayload} from '@/types/Contact';
+import { helpers, required } from '@vuelidate/validators';
+import { PHONE_TYPE, type PhoneEntry, type PhoneUpdatePayload} from '@/types/Contact';
 import { getPhoneTypeColor } from '@/composable/contacts';
 import ToggleInput from '@/components/Input/ToggleInput.vue';
 
@@ -52,12 +52,11 @@ const emit = defineEmits(['add:phone', 'update:phone'])
 const entries = computed(() => props.phones);
 
 const rules = computed(() => ({
-    minLength: minLength(1),
     $each: helpers.forEach({
         number: { required },
     })
 }));
-const v$ = useVuelidate(rules, entries, { $lazy: true })
+const v$ = useVuelidate(rules, entries.value, { $lazy: true })
 
 </script>
 

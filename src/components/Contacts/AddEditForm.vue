@@ -90,21 +90,27 @@
             </div>
             <div class="phones">
                 <p class="phone-header">Phone Numbers</p>
-                <PhoneEntryWidget :phones="model.phone" @add:phone="emit('add:phone')" @update:phone="sendUpdatePhone" />
+                <PhoneEntryWidget :phones="model.phone" :errors="v$?.phone?.$errors" @add:phone="emit('add:phone')" @update:phone="sendUpdatePhone" />
             </div>
         </div>
     </form>
 </template>
 
 <script setup lang="ts">
-    import { computed, reactive } from 'vue';
+    import { type PropType, computed, reactive } from 'vue';
     import { useVuelidate } from '@vuelidate/core'
-    import { required, email } from '@vuelidate/validators'
+    import { required, email, minLength } from '@vuelidate/validators'
     import { EnvelopeIcon, HomeModernIcon, BuildingOfficeIcon, UserIcon } from "@heroicons/vue/24/solid";
-    import { type PhoneUpdatePayload } from '@/types/Contact';
+    import { type Contact, type PhoneUpdatePayload } from '@/types/Contact';
+    import { contactFactory } from '@/composable/contacts';
     import PhoneEntryWidget from '@/components/Contacts/PhoneEntryWidget.vue';
 
-    const props = defineProps(['contact'])
+    const props = defineProps({
+        contact: {
+            type: Object as PropType<Contact>,
+            default: () => contactFactory(),
+        }
+    })
     const emit = defineEmits(['update:contact', 'add:phone', 'update:phone'])
 
     const sendUpdatePhone = (payload: PhoneUpdatePayload) => {
@@ -112,15 +118,16 @@
     };
 
     const model = reactive({...props.contact});
-    const updateContact = () => {
-        emit('update:contact', model);
-    }
 
     // Validation
     const rules = computed(() => ({
         firstName: { required },
         lastName: { required },
-        email: { required, email }
+        email: { required, email },
+        phone: {
+            required,
+            minLength: minLength(1)
+        },
     }));
 
     const v$ = useVuelidate(rules, model, { $lazy: true });

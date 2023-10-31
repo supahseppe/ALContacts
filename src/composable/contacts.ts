@@ -15,6 +15,7 @@ const createContact: () => Contact = () => {
             isDefault: true
         })],
         avatar: faker.image.avatar(),
+        address: {},
     };
 };
 

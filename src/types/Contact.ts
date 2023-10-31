@@ -27,10 +27,10 @@ export type Contact = {
     avatar?: string;
     phone: Array<PhoneEntry>;
     companyName?: string;
-    address?: {
-        street: string;
-        city: string;
-        state: string;
-        zip: string;
+    address: {
+        street?: string;
+        city?: string;
+        state?: string;
+        zip?: string;
     };
 };

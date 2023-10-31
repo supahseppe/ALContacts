@@ -11,8 +11,8 @@
         />
       </div>
       <div class="grid">
-        <button @click="addItem(1)">Add Random Contact</button>
-        <button @click="addItem(10)">Add 10 Random Contacts</button>
+        <button @click="addItem(1)">Add Example Contact</button>
+        <button @click="addItem(10)">Add 10 Example Contacts</button>
         <button @click="showAddForm">Add Custom Contact</button>
       </div>
     </main>
